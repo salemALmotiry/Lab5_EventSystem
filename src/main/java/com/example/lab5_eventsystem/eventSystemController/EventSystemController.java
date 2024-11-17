@@ -22,9 +22,16 @@ public class EventSystemController {
 
     @PostMapping("/new")
     public ApiResponse newEvent(@RequestBody Event event) {
-        if (events.contains(event)) {
-            return new ApiResponse("Event already exists");
-        }
+       for(Event e : events) {
+           if(e.getID() == event.getID()) {
+               return new ApiResponse("Event already exists");
+           }
+       }
+
+       if (event.getEndDate().isBefore(event.getStartDate())) {
+           return new ApiResponse("End date must be after start date");
+       }
+
         events.add(event);
         return new ApiResponse("Event created");
     }
@@ -50,10 +57,6 @@ public class EventSystemController {
 
     @GetMapping("/search/{id}")
     public Event getEventById(@PathVariable int id) {
-        if (id < 0 || id >= events.size() ) {
-          return null;
-        }
-
         for (Event event : events) {
             if (event.getID() == id) {
                 return event;
