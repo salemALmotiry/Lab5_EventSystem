@@ -20,7 +20,6 @@ public class EventSystemController {
         return events;
     }
 
-
     @PostMapping("/new")
     public ApiResponse newEvent(@RequestBody Event event) {
         if (events.contains(event)) {
