@@ -73,12 +73,16 @@ public class EventSystemController {
        int id = newCapacity.get("id");
        int capacity = newCapacity.get("capacity");
 
-       if ( capacity < 0) {
+       if ( capacity < 0 ) {
            return new ApiResponse("Invalid capacity");
        }
+
        for (Event event : events) {
            if (event.getID() == id ) {
-               event.setCapacity(capacity);
+               if (capacity > event.getCapacity()) {
+                   return new ApiResponse("Capacity exceeded");
+               }
+               event.setCapacity(event.getCapacity() - capacity);
            }
        }
         return new ApiResponse("capacity changed");
